@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Alunos</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+<body>
+
+    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">Cadastro de Alunos</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-3">Formulário de Cadastro</h2>
+        <form id="formAluno" class="row g-3">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" required>
+            </div>
+            <div class="col-md-3">
+                <label for="idade" class="form-label">Idade</label>
+                <input type="number" class="form-control" id="idade" required min="0">
+            </div>
+            <div class="col-md-3">
+                <label for="curso" class="form-label">Curso</label>
+                <select class="form-select" id="curso" required>
+                    <option value="">Selecione...</option>
+                    <option>JavaScript</option>
+                    <option>Python</option>
+                    <option>Java</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="nota" class="form-label">Nota Final</label>
+                <input type="number" class="form-control" id="nota" required min="0" max="10" step="0.1">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="reset" class="btn btn-secondary">Limpar</button>
+            </div>
+        </form>
+
+        <hr>
+
+        <h3>Lista de Alunos</h3>
+        <table class="table table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Curso</th>
+                    <th>Nota Final</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaAlunos">
+                <!-- Linhas serão inseridas aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+    <script>
+        let alunos = [];
+        let editIndex = null;
+
+        const form = document.getElementById('formAluno');
+        const tabela = document.getElementById('tabelaAlunos');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('nome').value.trim();
+            const idade = document.getElementById('idade').value;
+            const curso = document.getElementById('curso').value;
+            const nota = document.getElementById('nota').value;
+
+            if (editIndex === null) {
+                // Adiciona novo aluno
+                alunos.push({ nome, idade, curso, nota });
+            } else {
+                // Atualiza aluno existente
+                alunos[editIndex] = { nome, idade, curso, nota };
+                editIndex = null;
+            }
+
+            form.reset();
+            atualizarTabela();
+        });
+
+        function atualizarTabela() {
+            tabela.innerHTML = '';
+            alunos.forEach((aluno, index) => {
+                const row = `
+                    <tr>
+                        <td>${aluno.nome}</td>
+                        <td>${aluno.idade}</td>
+                        <td>${aluno.curso}</td>
+                        <td>${aluno.nota}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-2" onclick="editarAluno(${index})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="excluirAluno(${index})">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+                tabela.innerHTML += row;
+            });
+        }
+
+        function editarAluno(index) {
+            const aluno = alunos[index];
+            document.getElementById('nome').value = aluno.nome;
+            document.getElementById('idade').value = aluno.idade;
+            document.getElementById('curso').value = aluno.curso;
+            document.getElementById('nota').value = aluno.nota;
+            editIndex = index;
+        }
+
+        function excluirAluno(index) {
+            if (confirm('Deseja realmente excluir este aluno?')) {
+                alunos.splice(index, 1);
+                atualizarTabela();
+            }
+        }
+    </script>
+
+</body>
+</html>
