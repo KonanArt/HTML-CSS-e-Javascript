@@ -67,6 +67,24 @@
     <script src="./js/bootstrap.min.js"></script>
 
     <script>
+
+        class Aluno {
+            constructor(nome, idade, curso, notaFinal) {
+                this.nome = nome;
+                this.idade = idade;
+                this.curso = curso;
+                this.notaFinal = parseFloat(notaFinal);
+            }
+
+            isAprovado() {
+                return this.notaFinal >= 7;
+            }
+
+            toString() {
+                return `${this.nome} (${this.idade} anos) - Curso: ${this.curso}, Nota: ${this.notaFinal}`;
+            }
+        }
+
         let alunos = [];
         let editIndex = null;
 
@@ -79,14 +97,16 @@
             const nome = document.getElementById('nome').value.trim();
             const idade = document.getElementById('idade').value;
             const curso = document.getElementById('curso').value;
-            const nota = document.getElementById('nota').value;
+            const notaFinal = document.getElementById('nota').value;
+
+            const novoAluno = new Aluno(nome, idade, curso, notaFinal);
 
             if (editIndex === null) {
                 // Adiciona novo aluno
-                alunos.push({ nome, idade, curso, nota });
+                alunos.push(novoAluno);
             } else {
                 // Atualiza aluno existente
-                alunos[editIndex] = { nome, idade, curso, nota };
+                alunos[editIndex] = novoAluno;
                 editIndex = null;
             }
 
@@ -97,12 +117,16 @@
         function atualizarTabela() {
             tabela.innerHTML = '';
             alunos.forEach((aluno, index) => {
+                const situacao = aluno.isAprovado()
+                    ? '<span class="badge bg-success">Aprovado</span>'
+                    : '<span class="badge bg-danger">Reprovado</span>';
+
                 const row = `
                     <tr>
                         <td>${aluno.nome}</td>
                         <td>${aluno.idade}</td>
                         <td>${aluno.curso}</td>
-                        <td>${aluno.nota}</td>
+                        <td>${aluno.notaFinal}</td>
                         <td>
                             <button class="btn btn-warning btn-sm me-2" onclick="editarAluno(${index})">Editar</button>
                             <button class="btn btn-danger btn-sm" onclick="excluirAluno(${index})">Excluir</button>
@@ -118,7 +142,7 @@
             document.getElementById('nome').value = aluno.nome;
             document.getElementById('idade').value = aluno.idade;
             document.getElementById('curso').value = aluno.curso;
-            document.getElementById('nota').value = aluno.nota;
+            document.getElementById('nota').value = aluno.notaFinal;
             editIndex = index;
         }
 
