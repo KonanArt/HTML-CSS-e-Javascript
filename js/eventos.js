@@ -14,8 +14,8 @@ let editIndex = null;
 
 const form = document.getElementById('formAluno');
 const tabela = document.getElementById('tabelaAlunos');
+const saida = document.getElementById('saidaRelatorios');
 
-// Evento de envio do formulário (função anônima)
 form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -39,7 +39,6 @@ form.addEventListener('submit', function (e) {
     atualizarTabela();
 });
 
-// Atualiza a tabela (arrow function)
 const atualizarTabela = () => {
     tabela.innerHTML = '';
 
@@ -60,7 +59,6 @@ const atualizarTabela = () => {
             </td>
         `;
 
-        // Eventos com funções anônimas
         row.querySelector('.btn-warning').addEventListener('click', function () {
             editarAluno(index);
         });
@@ -73,7 +71,6 @@ const atualizarTabela = () => {
     });
 };
 
-// Editar aluno (arrow function)
 const editarAluno = (index) => {
     const aluno = alunos[index];
     document.getElementById('nome').value = aluno.nome;
@@ -85,7 +82,6 @@ const editarAluno = (index) => {
     alert(`Editando cadastro de ${aluno.nome}`);
 };
 
-// Excluir aluno (arrow function)
 const excluirAluno = (index) => {
     if (confirm('Deseja realmente excluir este aluno?')) {
         const nome = alunos[index].nome;
@@ -95,3 +91,66 @@ const excluirAluno = (index) => {
         alert(`Aluno ${nome} excluído com sucesso!`);
     }
 };
+
+const btnAprovados = document.getElementById('btnAprovados');
+const btnMediaNotas = document.getElementById('btnMediaNotas');
+const btnMediaIdades = document.getElementById('btnMediaIdades');
+const btnOrdemAlfabetica = document.getElementById('btnOrdemAlfabetica');
+const btnPorCurso = document.getElementById('btnPorCurso');
+
+// função auxiliar para mostrar resultados
+const mostrarResultado = (lista) => {
+    saida.innerHTML = '';
+    if (Array.isArray(lista)) {
+        lista.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            saida.appendChild(li);
+        });
+    } else {
+        const li = document.createElement('li');
+        li.textContent = lista;
+        saida.appendChild(li);
+    }
+};
+
+// Listar alunos aprovados
+btnAprovados.addEventListener('click', () => {
+    const aprovados = alunos
+        .filter(a => a.isAprovado())
+        .map(a => `${a.nome} (${a.notaFinal})`);
+    mostrarResultado(aprovados.length ? aprovados : 'Nenhum aluno aprovado.');
+});
+
+// Média das notas
+btnMediaNotas.addEventListener('click', () => {
+    if (alunos.length === 0) return mostrarResultado('Sem alunos cadastrados.');
+    const media = alunos.reduce((acc, a) => acc + a.notaFinal, 0) / alunos.length;
+    mostrarResultado(`Média das notas finais: ${media.toFixed(2)}`);
+});
+
+// Média das idades
+btnMediaIdades.addEventListener('click', () => {
+    if (alunos.length === 0) return mostrarResultado('Sem alunos cadastrados.');
+    const media = alunos.reduce((acc, a) => acc + a.idade, 0) / alunos.length;
+    mostrarResultado(`Média das idades: ${media.toFixed(1)} anos`);
+});
+
+// Nomes em ordem alfabética
+btnOrdemAlfabetica.addEventListener('click', () => {
+    const nomes = alunos.map(a => a.nome).sort();
+    mostrarResultado(nomes.length ? nomes : 'Nenhum aluno cadastrado.');
+});
+
+// Quantidade por curso
+btnPorCurso.addEventListener('click', () => {
+    if (alunos.length === 0) return mostrarResultado('Sem alunos cadastrados.');
+
+    const porCurso = alunos.reduce((acc, a) => {
+        acc[a.curso] = (acc[a.curso] || 0) + 1;
+        return acc;
+    }, {});
+
+    const lista = Object.entries(porCurso).map(([curso, qtd]) => `${curso}: ${qtd} aluno(s)`);
+    mostrarResultado(lista);
+});

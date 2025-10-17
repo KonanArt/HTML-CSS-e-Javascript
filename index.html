@@ -62,6 +62,22 @@
                 <!-- Linhas serão inseridas aqui -->
             </tbody>
         </table>
+        <hr>
+
+        <h3>Relatórios</h3>
+        <div class="mt-3">
+            <button id="btnAprovados" class="btn btn-success me-2">Listar Aprovados</button>
+            <button id="btnMediaNotas" class="btn btn-primary me-2">Média das Notas</button>
+            <button id="btnMediaIdades" class="btn btn-info me-2">Média das Idades</button>
+            <button id="btnOrdemAlfabetica" class="btn btn-secondary me-2">Nomes em Ordem Alfabética</button>
+            <button id="btnPorCurso" class="btn btn-dark">Qtd por Curso</button>
+        </div>
+
+        <div id="relatorios" class="mt-4 p-3 border rounded bg-light">
+            <h5>Resultados:</h5>
+            <ul id="saidaRelatorios"></ul>
+        </div>
+
     </div>
 
     <script src="./js/popper.min.js"></script>
