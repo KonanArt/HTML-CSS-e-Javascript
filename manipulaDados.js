@@ -35,24 +35,25 @@ const btnSalvarEdicao = document.getElementById("btnSalvarEdicao");
 const btnCancelarEdicao = document.getElementById("btnCancelarEdicao");
 const indiceEdicaoInput = document.getElementById("indiceEdicao");
 
-// Evento de cadastro
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
+// Evento de cadastro (função anônima)
+form.addEventListener("submit", e => {
+  e.preventDefault();
 
-  const nome = document.getElementById("nome").value;
+  const nome = document.getElementById("nome").value.trim();
   const idade = document.getElementById("idade").value;
-  const cargo = document.getElementById("cargo").value;
+  const cargo = document.getElementById("cargo").value.trim();
   const salario = document.getElementById("salario").value;
 
-  const novoFuncionario = new Funcionario(nome, idade, cargo, salario);
-  funcionarios.push(novoFuncionario);
-
-  atualizarTabela();
-  form.reset();
+  if (nome && cargo) {
+    const novo = new Funcionario(nome, idade, cargo, salario);
+    funcionarios.push(novo);
+    atualizarTabela();
+    form.reset();
+  }
 });
 
-// Atualiza a tabela
-function atualizarTabela() {
+// Atualiza tabela
+const atualizarTabela = () => {
   tbody.innerHTML = "";
 
   funcionarios.forEach((func, index) => {
@@ -64,25 +65,31 @@ function atualizarTabela() {
       <td>${func.getCargo()}</td>
       <td>${Number(func.getSalario()).toFixed(2)}</td>
       <td>
-        <button class="btn btn-warning btn-sm me-2" onclick="editarFuncionario(${index})">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="excluirFuncionario(${index})">Excluir</button>
+        <button class="btn btn-warning btn-sm me-2">Editar</button>
+        <button class="btn btn-danger btn-sm">Excluir</button>
       </td>
     `;
 
+    // Funções anônimas para editar e excluir
+    const [btnEditar, btnExcluir] = linha.querySelectorAll("button");
+
+    btnEditar.onclick = () => editarFuncionario(index);
+    btnExcluir.onclick = () => excluirFuncionario(index);
+
     tbody.appendChild(linha);
   });
-}
+};
 
 // Função para excluir funcionário
-function excluirFuncionario(index) {
+const excluirFuncionario = index => {
   if (confirm("Deseja realmente excluir este funcionário?")) {
-    funcionarios.splice(index, 1);
+    funcionarios = funcionarios.filter((_, i) => i !== index);
     atualizarTabela();
   }
 }
 
 // Função para editar funcionário
-function editarFuncionario(index) {
+const editarFuncionario = index => {
   const func = funcionarios[index];
 
   document.getElementById("nome").value = func.getNome();
@@ -94,7 +101,7 @@ function editarFuncionario(index) {
   btnCadastrar.classList.add("d-none");
   btnSalvarEdicao.classList.remove("d-none");
   btnCancelarEdicao.classList.remove("d-none");
-}
+};
 
 // Salvar alteração
 btnSalvarEdicao.addEventListener("click", () => {
@@ -113,12 +120,12 @@ btnSalvarEdicao.addEventListener("click", () => {
 });
 
 // Cancelar edição
-btnCancelarEdicao.addEventListener("click", cancelarEdicao);
+btnCancelarEdicao.addEventListener("click", () => cancelarEdicao());
 
-function cancelarEdicao() {
+const cancelarEdicao = () => {
   form.reset();
   indiceEdicaoInput.value = "";
   btnCadastrar.classList.remove("d-none");
   btnSalvarEdicao.classList.add("d-none");
   btnCancelarEdicao.classList.add("d-none");
-}
+};
