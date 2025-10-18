@@ -34,6 +34,22 @@ const btnCadastrar = document.getElementById("btnCadastrar");
 const btnSalvarEdicao = document.getElementById("btnSalvarEdicao");
 const btnCancelarEdicao = document.getElementById("btnCancelarEdicao");
 const indiceEdicaoInput = document.getElementById("indiceEdicao");
+// Referências dos botões de relatório
+const btnSalarioMaior = document.getElementById("btnSalarioMaior");
+const btnMediaSalarial = document.getElementById("btnMediaSalarial");
+const btnCargosUnicos = document.getElementById("btnCargosUnicos");
+const btnNomesMaiusculo = document.getElementById("btnNomesMaiusculo");
+
+const modal = new bootstrap.Modal(document.getElementById("modalRelatorio"));
+const modalTitulo = document.getElementById("modalTitulo");
+const modalCorpo = document.getElementById("modalCorpo");
+
+const mostrarRelatorio = (titulo, conteudoHTML) => {
+  modalTitulo.innerHTML = titulo;
+  modalCorpo.innerHTML = conteudoHTML;
+  modal.show();
+};
+
 
 // Evento de cadastro (função anônima)
 form.addEventListener("submit", e => {
@@ -129,3 +145,45 @@ const cancelarEdicao = () => {
   btnSalvarEdicao.classList.add("d-none");
   btnCancelarEdicao.classList.add("d-none");
 };
+
+btnSalarioMaior.onclick = () => {
+  const lista = funcionarios
+    .filter(f => f.getSalario() > 5000)
+    .map(f => `<li>${f.getNome()} - R$ ${f.getSalario()}</li>`)
+    .join("");
+
+  mostrarRelatorio("Funcionários com salário acima de R$ 5000",
+    lista ? `<ul>${lista}</ul>` : "Nenhum funcionário encontrado."
+  );
+};
+
+btnMediaSalarial.onclick = () => {
+  const media = funcionarios.reduce((soma, f) => soma + Number(f.getSalario()), 0) / funcionarios.length;
+
+  mostrarRelatorio("Média Salarial",
+    funcionarios.length
+      ? `A média salarial é <strong>R$ ${media.toFixed(2)}</strong>`
+      : "Não há funcionários cadastrados."
+  );
+};
+
+btnCargosUnicos.onclick = () => {
+  const cargos = [...new Set(funcionarios.map(f => f.getCargo()))]
+    .map(c => `<li>${c}</li>`)
+    .join("");
+
+  mostrarRelatorio("Cargos sem repetição",
+    cargos ? `<ul>${cargos}</ul>` : "Nenhum cargo encontrado."
+  );
+};
+
+btnNomesMaiusculo.onclick = () => {
+  const nomes = funcionarios
+    .map(f => `<li>${f.getNome().toUpperCase()}</li>`)
+    .join("");
+
+  mostrarRelatorio("Nomes em Maiúsculo",
+    nomes ? `<ul>${nomes}</ul>` : "Nenhum nome disponível."
+  );
+};
+

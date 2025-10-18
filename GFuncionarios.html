@@ -103,6 +103,50 @@
           </table>
         </div>
       </div>
+      <!-- Botões de Relatórios -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-body">
+          <h4 class="mb-3">Relatórios</h4>
+          <button class="btn btn-outline-primary me-2" id="btnSalarioMaior">
+            Salário > 5000
+          </button>
+          <button class="btn btn-outline-success me-2" id="btnMediaSalarial">
+            Média Salarial
+          </button>
+          <button class="btn btn-outline-warning me-2" id="btnCargosUnicos">
+            Cargos Únicos
+          </button>
+          <button class="btn btn-outline-dark" id="btnNomesMaiusculo">
+            Nomes em Maiúsculo
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal de Relatórios -->
+      <div class="modal fade" id="modalRelatorio" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitulo">Relatório</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body" id="modalCorpo"></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="./js/popper.min.js"></script>
