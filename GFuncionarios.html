@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gerenciamento de Funcionarios</title>
+    <title>Gerenciamento de Funcionários</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css" />
   </head>
   <body class="bg-light">
@@ -14,6 +14,8 @@
       <div class="card shadow-sm mb-4">
         <div class="card-body">
           <form id="formFuncionario" class="row g-3">
+            <input type="hidden" id="indiceEdicao" value="" />
+
             <div class="col-md-6">
               <label for="nome" class="form-label">Nome</label>
               <input
@@ -59,30 +61,44 @@
             </div>
 
             <div class="col-12">
-              <button type="submit" class="btn btn-primary">Cadastrar</button>
+              <button type="submit" class="btn btn-primary" id="btnCadastrar">
+                Cadastrar
+              </button>
+              <button
+                type="button"
+                class="btn btn-success d-none"
+                id="btnSalvarEdicao"
+              >
+                Salvar Alteração
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary d-none"
+                id="btnCancelarEdicao"
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         </div>
       </div>
 
-      <!-- Tabela de Funcionários -->
+      <!-- Tabela -->
       <div class="card shadow-sm">
         <div class="card-body">
           <h4 class="mb-3">Lista de Funcionários</h4>
-          <table
-            class="table table-bordered table-striped"
-            id="tabelaFuncionarios"
-          >
+          <table class="table table-bordered table-striped text-center">
             <thead class="table-dark">
               <tr>
                 <th>Nome</th>
                 <th>Idade</th>
                 <th>Cargo</th>
                 <th>Salário (R$)</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody id="tbodyFuncionarios">
-              <!-- Funcionários cadastrados aparecerão aqui -->
+              <!-- Linhas geradas dinamicamente -->
             </tbody>
           </table>
         </div>
